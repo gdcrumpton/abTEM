@@ -3,6 +3,7 @@
 import numpy as np
 
 from abtem.potentials.charge_density import ChargeDensityPotential
+from castepxbin import read_castep_bin
 
 
 class CASTEPPotential(ChargeDensityPotential):
@@ -113,3 +114,21 @@ def from_pot1d(path: str):
 
     f.close()
     return potential_fmt
+
+def from_castep_bin(path: str):
+    """
+    Parses the '.castep_bin' file from a CASTEP calculation and extracts the potential.
+
+    Args:
+        path : string 
+            Path to the file location.
+            
+    Returns:
+        potential_array : np.ndarray
+            that can be read into the 'charge_density' input.
+    """
+    
+    data = read_castep_bin(path)
+    potential_array = data['charge_density'].real
+    
+    return potential_array
